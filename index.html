@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CLEAR HTML</title>
+</head>
+<body>
+<textarea style="width:100%; height:400px; border:0; border-radius:20px;"></textarea>
+<p style="text-align:center"><button>CLEAR</button></p>
+<script>
+    document.querySelector('button').addEventListener('click', function (event) {
+        var textarea = document.querySelector('textarea');
+        var t = decodeURIComponent(textarea.value);
+        var regexps = ['<!--[^]+?-->', '<noindex>[^]+?<\\/noindex>', '<[^>]+>'];
+        for (var i = 0, len = regexps.length; i < len; i++) {
+            var r = new RegExp(regexps[i], 'gi');
+            t = t.replace(r, ' ');
+        }
+
+        t = t
+            .replace(/&nbsp;/ig, ' ')
+            .replace(/\s*([«])\s*/g, ' $1')
+            .replace(/\s*([(])\s*/g, ' $1')
+            .replace(/\s*([»])\s*/g, '$1 ')
+            .replace(/\s*([)])\s*/g, '$1 ')
+            .replace(/\s*(\.\.\.|[.,!?])\s*/gi, '$1 ')
+            .replace(/"([^"]*?)"/gi, '«$1»')
+            .replace('"', '\'')
+            .replace(/\s+/g, ' ')
+            .replace(/(^\s*)|(\s*)$/g, '')
+            .replace(/Ё/g, 'Е')
+            .replace(/ё/g, 'е');
+
+        event.preventDefault();
+        textarea.value = t;
+        textarea.focus();
+        textarea.select();
+        document.execCommand('copy');
+    });
+</script>
+</body>
+</html>
